@@ -279,7 +279,7 @@ class MailTracker
 
     /**
      * Generate a unique hash for tracking
-     * 
+     *
      * @return string
      */
     protected function generateUniqueHash(): string
@@ -294,7 +294,7 @@ class MailTracker
 
     /**
      * Process the message body to add tracking elements
-     * 
+     *
      * @param Email $message
      * @param string $hash
      * @return string The original HTML content
@@ -316,7 +316,7 @@ class MailTracker
 
     /**
      * Check if content is multipart
-     * 
+     *
      * @param mixed $content
      * @return bool
      */
@@ -329,7 +329,7 @@ class MailTracker
 
     /**
      * Process multipart content
-     * 
+     *
      * @param Email $message
      * @param mixed $original_content
      * @param string $hash
@@ -367,7 +367,7 @@ class MailTracker
 
     /**
      * Process nested parts in multipart content
-     * 
+     *
      * @param mixed $part
      * @param Email $message
      * @param string $hash
@@ -410,7 +410,7 @@ class MailTracker
 
     /**
      * Process single part content
-     * 
+     *
      * @param Email $message
      * @param mixed $original_content
      * @param string $hash
@@ -431,7 +431,7 @@ class MailTracker
 
     /**
      * Create a TextPart with tracking added
-     * 
+     *
      * @param string $html
      * @param Email $message
      * @param mixed $part
@@ -450,7 +450,7 @@ class MailTracker
 
     /**
      * Save the tracker record to the database
-     * 
+     *
      * @param string $hash
      * @param mixed $headers
      * @param string $from_name
@@ -468,7 +468,7 @@ class MailTracker
         string $from_email,
         string $to_name,
         string $to_email,
-        string $subject,
+        ?string $subject,
         string $original_html
     ): void {
         /** @var SentEmail $tracker */
