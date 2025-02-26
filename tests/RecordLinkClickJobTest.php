@@ -11,7 +11,7 @@ use jdavidbakr\MailTracker\RecordComplaintJob;
 use jdavidbakr\MailTracker\RecordLinkClickJob;
 use jdavidbakr\MailTracker\Events\LinkClickedEvent;
 
-class RecordLinkClickJobTest extends SetUpTest
+class RecordLinkClickJobTest extends BaseTestCase
 {
     /**
      * @test

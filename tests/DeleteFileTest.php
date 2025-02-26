@@ -5,7 +5,7 @@ namespace jdavidbakr\MailTracker\Tests;
 use Illuminate\Support\Facades\Storage;
 use jdavidbakr\MailTracker\Model\SentEmail;
 
-class DeleteFileTest extends SetUpTest
+class DeleteFileTest extends BaseTestCase
 {
 
     /** @test */

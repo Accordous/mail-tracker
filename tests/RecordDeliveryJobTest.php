@@ -11,7 +11,7 @@ use jdavidbakr\MailTracker\RecordComplaintJob;
 use jdavidbakr\MailTracker\Events\EmailDeliveredEvent;
 use jdavidbakr\MailTracker\Events\ComplaintMessageEvent;
 
-class RecordDeliveryJobTest extends SetUpTest
+class RecordDeliveryJobTest extends BaseTestCase
 {
     /**
      * @test
