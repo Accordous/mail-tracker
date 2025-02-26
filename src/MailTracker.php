@@ -62,7 +62,8 @@ class MailTracker
      * @param string $sentEmailModelClass
      * @return void
      */
-    public static function useSentEmailModel(string $sentEmailModelClass): void {
+    public static function useSentEmailModel(string $sentEmailModelClass): void
+    {
         static::$sentEmailModel = $sentEmailModelClass;
     }
 
@@ -178,13 +179,13 @@ class MailTracker
     protected function injectTrackingPixel($html, $hash)
     {
         // Append the tracking url
-        $tracking_pixel = '<img border=0 width=1 alt="" height=1 src="'.route('mailTracker_t', [$hash]).'" />';
+        $tracking_pixel = '<img border=0 width=1 alt="" height=1 src="' . route('mailTracker_t', [$hash]) . '" />';
 
         $linebreak = app(Str::class)->random(32);
         $html = str_replace("\n", $linebreak, $html);
 
         if (preg_match("/^(.*<body[^>]*>)(.*)$/", $html, $matches)) {
-            $html = $matches[1].$tracking_pixel.$matches[2];
+            $html = $matches[1] . $tracking_pixel . $matches[2];
         } else {
             $html = $html . $tracking_pixel;
         }
@@ -214,7 +215,7 @@ class MailTracker
             $url = str_replace('&amp;', '&', $matches[2]);
         }
 
-        return $matches[1].route(
+        return $matches[1] . route(
             'mailTracker_n',
             [
                 'l' => $url,
@@ -265,15 +266,16 @@ class MailTracker
 
                 $original_content = $message->getBody();
                 $original_html = '';
-                if(
-                    ($original_content instanceof(AlternativePart::class)) ||
-                    ($original_content instanceof(MixedPart::class)) ||
-                    ($original_content instanceof(RelatedPart::class))
+                if (
+                    ($original_content instanceof (AlternativePart::class)) ||
+                    ($original_content instanceof (MixedPart::class)) ||
+                    ($original_content instanceof (RelatedPart::class))
                 ) {
                     $messageBody = $message->getBody() ?: [];
                     $newParts = [];
-                    foreach($messageBody->getParts() as $part) {
-                        if($part->getMediaSubtype() == 'html') {
+                    foreach ($messageBody->getParts() as $part) {
+
+                        if ($part->getMediaSubtype() == 'html') {
                             $original_html = $part->getBody();
                             $newParts[] = new TextPart(
                                 $this->addTrackers($original_html, $hash),
@@ -282,9 +284,11 @@ class MailTracker
                                 null
                             );
                         } else if (in_array($part->getMediaSubtype(), ['alternative', 'related'])) {
+
                             if (method_exists($part, 'getParts')) {
                                 foreach ($part->getParts() as $p) {
-                                    if($p->getMediaSubtype() == 'html') {
+                                    // Check if this is an HTML part
+                                    if ($p->getMediaSubtype() == 'html') {
                                         $original_html = $p->getBody();
                                         $newParts[] = new TextPart(
                                             $this->addTrackers($original_html, $hash),
@@ -292,8 +296,30 @@ class MailTracker
                                             $p->getMediaSubtype(),
                                             null
                                         );
-
                                         break;
+                                    }
+                                    // Check if this is another nested part that might contain HTML
+                                    else if (method_exists($p, 'getParts') && !empty($p->getParts())) {
+                                        $hasHtmlPart = false;
+                                        foreach ($p->getParts() as $nestedPart) {
+                                            if ($nestedPart->getMediaSubtype() == 'html') {
+                                                $original_html = $nestedPart->getBody();
+                                                $newParts[] = new TextPart(
+                                                    $this->addTrackers($original_html, $hash),
+                                                    $message->getHtmlCharset(),
+                                                    $nestedPart->getMediaSubtype(),
+                                                    null
+                                                );
+                                                $hasHtmlPart = true;
+                                                break;
+                                            }
+                                        }
+                                        // If we didn't find and process an HTML part, add the original part with all its contents
+                                        if (!$hasHtmlPart) {
+                                            $newParts[] = $p;
+                                        }
+                                    } else {
+                                        $newParts[] = $p;
                                     }
                                 }
                             }
@@ -304,8 +330,9 @@ class MailTracker
                     $message->setBody(new (get_class($original_content))(...$newParts));
                 } else {
                     $original_html = $original_content->getBody();
-                    if($original_content->getMediaSubtype() == 'html') {
-                        $message->setBody(new TextPart(
+                    if ($original_content->getMediaSubtype() == 'html') {
+                        $message->setBody(
+                            new TextPart(
                                 $this->addTrackers($original_html, $hash),
                                 $message->getHtmlCharset(),
                                 $original_content->getMediaSubtype(),
@@ -327,7 +354,7 @@ class MailTracker
                     'opens' => 0,
                     'clicks' => 0,
                     'message_id' => Str::uuid(),
-                ]), function(Model|SentEmailModel $sentEmail) use ($original_html, $hash) {
+                ]), function (Model|SentEmailModel $sentEmail) use ($original_html, $hash) {
                     $sentEmail->fillContent($original_html, $hash);
 
                     $sentEmail->save();
