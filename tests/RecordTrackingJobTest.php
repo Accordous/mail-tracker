@@ -13,7 +13,7 @@ use jdavidbakr\MailTracker\RecordLinkClickJob;
 use jdavidbakr\MailTracker\Events\ViewEmailEvent;
 use jdavidbakr\MailTracker\Events\LinkClickedEvent;
 
-class RecordTrackingJobTest extends SetUpTest
+class RecordTrackingJobTest extends BaseTestCase
 {
     /**
      * @test

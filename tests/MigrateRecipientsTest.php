@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 use jdavidbakr\MailTracker\Console\MigrateRecipients;
 use jdavidbakr\MailTracker\MailTracker;
 
-class MigrateRecipientsTest extends SetUpTest
+class MigrateRecipientsTest extends BaseTestCase
 {
     /**
      * @test

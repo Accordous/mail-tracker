@@ -60,7 +60,7 @@ class TestMailable extends Mailable
     }
 }
 
-class MailTrackerTest extends SetUpTest
+class MailTrackerTest extends BaseTestCase
 {
     protected function disableExceptionHandling()
     {

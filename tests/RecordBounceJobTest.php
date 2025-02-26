@@ -9,7 +9,7 @@ use jdavidbakr\MailTracker\Events\TransientBouncedMessageEvent;
 use jdavidbakr\MailTracker\MailTracker;
 use jdavidbakr\MailTracker\RecordBounceJob;
 
-class RecordBounceJobTest extends SetUpTest
+class RecordBounceJobTest extends BaseTestCase
 {
     /**
      * @test
